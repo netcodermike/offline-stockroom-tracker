@@ -1,0 +1,3 @@
+import{createServer}from'node:http';import{readFileSync}from'node:fs';import{stripTypeScriptTypes}from'node:module';
+const html=readFileSync(new URL('public/index.html',import.meta.url)),js=stripTypeScriptTypes(readFileSync(new URL('core.ts',import.meta.url),'utf8'));
+createServer((req,res)=>{const path=new URL(req.url??'/','http://localhost').pathname;if(!['/','/core.js'].includes(path)){res.writeHead(404);res.end();return;}res.writeHead(200,{'Content-Type':path==='/'?'text/html; charset=utf-8':'text/javascript; charset=utf-8'});res.end(path==='/'?html:js);}).listen(Number(process.env.PORT??3030),'127.0.0.1',()=>console.log('Local app: http://127.0.0.1:'+(process.env.PORT??3030)));

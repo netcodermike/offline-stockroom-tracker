@@ -1,0 +1,3 @@
+import{test}from'node:test';import assert from'node:assert/strict';import{validate,adjust,barcode}from'./core.ts';
+test('stock movement and validation',()=>{const a=validate([{sku:'12',name:'Bolts',qty:2,minimum:3}]);assert.equal(adjust(a,'12',-1)[0].qty,1);assert.equal(a[0].qty,2);assert.throws(()=>adjust(a,'12',-3));assert.throws(()=>validate([...a,...a]));});
+test('numeric Code39 has guards, quiet zones, and valid binary',()=>{const b=barcode('0');assert.match(b,/^0{10}1000101110111010/);assert.ok(b.includes('101000111011101'));assert.match(b,/^[01]+$/);assert.throws(()=>barcode('A'));});
